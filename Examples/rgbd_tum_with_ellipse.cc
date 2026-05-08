@@ -103,7 +103,7 @@ int main(int argc, char **argv)
     }
 
     // Create system
-    ORB_SLAM2::System SLAM(vocabulary_file, parameters_file, ORB_SLAM2::System::RGBD, true, false);
+    ORB_SLAM2::System SLAM(vocabulary_file, parameters_file, ORB_SLAM2::System::RGBD, false, false);
     SLAM.SetRelocalizationMode(relocalization_mode);
 
     //nImages = 900;
@@ -180,13 +180,13 @@ int main(int argc, char **argv)
     // Stop all threads
     SLAM.Shutdown();
 
-
     // Save camera tracjectory
 
     // TXT files
     std::ofstream file(output_folder + "camera_poses_" + output_name + ".txt");
     std::ofstream file_tum(output_folder + "camera_poses_" + output_name + "_tum.txt");    // output poses in the TUM RGB-D format
     json json_data;
+
     for (unsigned int i = 0; i < poses.size(); ++i)
     {
         Eigen::Matrix4d m = poses[i];
@@ -216,12 +216,10 @@ int main(int argc, char **argv)
     file.close();
     file_tum.close();
 
-
     // JSON files
     std::ofstream json_file(output_folder + "camera_poses_" + output_name + ".json");
     json_file << json_data;
     json_file.close();
-
 
     // Tracking time statistics
     sort(vTimesTrack.begin(),vTimesTrack.end());
